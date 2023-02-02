@@ -26,11 +26,11 @@ client.on("ready", () => {
 		status: "idle",
 	});
 
-	const hook = new WebhookClient({
-		url: "https://canary.discord.com/api/webhooks/1070648574272094228/MwMJY6H3z7noOM7t0TJkNl_ahOdD3puD-fudSuu9agmcGWTv7bVC-9EIc-UXe9eQ5Zp5",
-	});
+	const events_channel = client.channels.cache.find(
+		channel => channel.id === "1024038023052152904"
+	);
 
-	hook.send(`${client.user.tag} is ready ✅`);
+	events_channel.send(`${client.user.tag} is ready ✅`);
 });
 
 client.on("messageCreate", message => {
