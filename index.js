@@ -1,10 +1,18 @@
+//==================================================================================//
+
+const express = require("express");
+const app = express();
+const port = 3000;
+
+app.get("/", (req, res) => res.send("adasiek.xyz"));
+
+app.listen(port, () => console.log(`http://localhost:${port}`));
+
+//==================================================================================//
+// 									REPLIT KEEP ALIVE
+
 require("dotenv").config();
-const {
-	Client,
-	MessageEmbed,
-	WebhookClient,
-	Permissions,
-} = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 const client = new Client({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
@@ -36,10 +44,12 @@ client.on("ready", () => {
 client.on("messageCreate", message => {
 	if (!message.content.startsWith(prefix)) return;
 	if (message.author.bot) return;
-	// if (message.guild.id != "875384791334285342") return;
+	if (message.guild.id != "875384791334285342") return;
 
-	if (!message.member.permissions.has(Permissions.FLAGS.MOVE_MEMBERS))
-		return message.channel.send(`you ain't admin, are you?`);
+	const member = message.member;
+
+	if (!member.roles.cache.has("983812309950550016"))
+		return message.reply("you ain't admin, are you?");
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
@@ -58,9 +68,7 @@ client.on("messageCreate", message => {
 		const target = message.mentions.members.first();
 
 		if (!target)
-			return message.channel.send(
-				`u need to mention an idiot which u want to ban`
-			);
+			return message.reply(`u need to mention an idiot which u want to ban`);
 
 		try {
 			target.ban();
@@ -92,9 +100,7 @@ client.on("messageCreate", message => {
 		const target = message.mentions.members.first();
 
 		if (!target)
-			return message.channel.send(
-				`u need to mention an idiot which u want to kick`
-			);
+			return message.reply(`u need to mention an idiot which u want to kick`);
 
 		try {
 			target.kick();
@@ -108,7 +114,7 @@ client.on("messageCreate", message => {
 	if (command === "ping") {
 		const ping_embed = new MessageEmbed()
 			.setColor("#2F3136")
-			.setDescription(`websocket: \`${client.ws.ping}\ms`);
+			.setDescription(`websocket: \`${client.ws.ping}\`ms`);
 
 		message.reply({ embeds: [ping_embed] });
 	}
@@ -117,9 +123,9 @@ client.on("messageCreate", message => {
 		const sayMessageChannel = message.mentions.channels.first();
 		const sayMessage = args.slice(1).join(" ");
 
-		if (!sayMessage) return message.channel.send(`give some text dumbass`);
+		if (!sayMessage) return message.reply(`give some text dumbass`);
 		if (!sayMessageChannel)
-			return message.channel.send(
+			return message.reply(
 				`ping channel bc i dont know where i have to send message`
 			);
 
